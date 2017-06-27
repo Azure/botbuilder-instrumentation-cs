@@ -1,0 +1,166 @@
+{
+  "luis_schema_version": "1.3.0",
+  "name": "SimpleAlarm",
+  "desc": "",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "alarm.delete"
+    },
+    {
+      "name": "alarm.set"
+    },
+    {
+      "name": "None"
+    }
+  ],
+  "entities": [
+    {
+      "name": "AlarmName"
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "bing_entities": [
+    "datetime"
+  ],
+  "actions": [
+    {
+      "actionName": "alarm.delete",
+      "intentName": "alarm.delete",
+      "channel": null,
+      "actionParameters": [
+        {
+          "parameterName": "Name",
+          "entityName": "AlarmName",
+          "required": false,
+          "question": "",
+          "phraseListFeatureName": null
+        }
+      ]
+    },
+    {
+      "actionName": "alarm.set",
+      "intentName": "alarm.set",
+      "channel": null,
+      "actionParameters": [
+        {
+          "parameterName": "time",
+          "entityName": "datetime",
+          "required": true,
+          "question": "",
+          "phraseListFeatureName": null
+        }
+      ]
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "set a new alarm in 5 minutes named bla",
+      "intent": "alarm.set",
+      "entities": []
+    },
+    {
+      "text": "cancel the alarm at 8pm",
+      "intent": "alarm.delete",
+      "entities": []
+    },
+    {
+      "text": "create an alarm at 3am",
+      "intent": "alarm.set",
+      "entities": []
+    },
+    {
+      "text": "set an alarm at 8:30pm",
+      "intent": "alarm.set",
+      "entities": []
+    },
+    {
+      "text": "set alarm in 5 minutes",
+      "intent": "alarm.set",
+      "entities": []
+    },
+    {
+      "text": "delete alarm morning",
+      "intent": "alarm.delete",
+      "entities": [
+        {
+          "entity": "AlarmName",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "remove alarm workday",
+      "intent": "alarm.delete",
+      "entities": [
+        {
+          "entity": "AlarmName",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "delete alarm nighttime wow",
+      "intent": "alarm.delete",
+      "entities": [
+        {
+          "entity": "AlarmName",
+          "startPos": 2,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "help",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "set alarm in 5 hours",
+      "intent": "alarm.set",
+      "entities": []
+    },
+    {
+      "text": "start over",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "quit",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "undefined",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "set an alarm named xxx in 10 more minutes",
+      "intent": "alarm.set",
+      "entities": [
+        {
+          "entity": "AlarmName",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "add an alarm xxx in 1 hour",
+      "intent": "alarm.set",
+      "entities": [
+        {
+          "entity": "AlarmName",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    }
+  ]
+}
