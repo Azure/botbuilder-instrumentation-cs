@@ -24,7 +24,7 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
     /// </summary>
     public static class TelemetryLogger
     {
-        private static string _textAnalyticsMinLength;
+        private static int _textAnalyticsMinLength;
         private static string _textAnalyticsApiKey;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
             TelemetryConfiguration.Active.InstrumentationKey = activeInstrumentationKey;
 
             // Set the text analytics parameters.
-            _textAnalyticsMinLength = textAnalyticsMinLength;
+            int.TryParse(textAnalyticsMinLength, out _textAnalyticsMinLength);
             _textAnalyticsApiKey = textAnalyticsApiKey;
 
             // Register activity logger
@@ -102,7 +102,7 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
         {
             var text = activity.AsMessageActivity().Text;
             var numWords = text.Split(' ').Length;
-            if (numWords >= Int32.Parse(_textAnalyticsMinLength) && _textAnalyticsApiKey != String.Empty)
+            if (numWords >= _textAnalyticsMinLength && !string.IsNullOrEmpty(_textAnalyticsApiKey))
             {
                 var properties = new Dictionary<string, string>
                 {

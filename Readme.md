@@ -34,12 +34,12 @@ The parameters that `TelemetryLogger` needs to work are stored in your bot's `we
     
     <!-- Text Analytics data for message sentiment analysis -->
     <add key="TextAnalyticsApiKey" value="a501dfbedcb446eb8ff2bb2174d3add1" />
-    <add key="TextAnalyticsMinLenght" value="3" />
+    <add key="TextAnalyticsMinLength" value="3" />
 ```
 * `InstrumentationKey`. Is your Application Insights instrumentation key, you can obtain this key from Azure Portal once you configure your web application to use application insights. Note that the `TelemetryLogger` class initializes AppInsights using code, so you will need to remove the TelemetryKey element from the `ApplicationInsights.config` file, this allows you to have different keys for different environments and change them through configuration if needed.  
 You should use this same key for bot configuration in the bot's registration portal. 
 * `TextAnalyticsApiKey`. To track sentiment analysis, the telemetry code calls the Text Analytics API, you can obtain this key from the Azure Portal. The bot won't log any sentiment data if this value is empty.
-* `TextAnalyticsMinLenght`. You normally don't want to track sentiment for short phrases like "yes", "no", etc. In the example above, this parameter tells the logger to only track sentiment for messages that have 3 words or more. 
+* `TextAnalyticsMinLength`. You normally don't want to track sentiment for short phrases like "yes", "no", etc. In the example above, this parameter tells the logger to only track sentiment for messages that have 3 words or more. The bot will track sentiment for all phrases if this value is empty.
 
 ### Initialize the telemetry logger
 Once you updated your `web.config`, you need to initialize the `TelemetryLogger` class by calling the `Initialize()` method in `Global.asax.cs` as follows:
@@ -47,7 +47,7 @@ Once you updated your `web.config`, you need to initialize the `TelemetryLogger`
 protected void Application_Start()
 {
     // Initialize telemetry subsytem.
-    TelemetryLogger.Initialize(ConfigurationManager.AppSettings["InstrumentationKey"], ConfigurationManager.AppSettings["TextAnalyticsApiKey"], ConfigurationManager.AppSettings["TextAnalyticsMinLenght"]);
+    TelemetryLogger.Initialize(ConfigurationManager.AppSettings["InstrumentationKey"], ConfigurationManager.AppSettings["TextAnalyticsApiKey"], ConfigurationManager.AppSettings["TextAnalyticsMinLength"]);
 
     // Configure Web API.
     GlobalConfiguration.Configure(WebApiConfig.Register);
