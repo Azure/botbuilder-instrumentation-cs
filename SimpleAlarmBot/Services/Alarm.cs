@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry;
 
 namespace Microsoft.Bot.Sample.SimpleAlarmBot.Services
 {
@@ -52,7 +51,7 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Services
             reply.Text = $"Hello, this is the {this} firing.";
 
             // We don't have a dialog so we need to log the message manually.
-            TelemetryLogger.TrackActivity(reply).Wait(CancellationToken.None);
+            IoC.GetBotInstrumentation().TrackActivity(reply).Wait(CancellationToken.None);
             client.Conversations.ReplyToActivityAsync(reply);
 
             _alarmTimer.Dispose();

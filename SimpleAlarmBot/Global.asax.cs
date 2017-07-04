@@ -2,7 +2,8 @@
 using System.Configuration;
 using System.Web;
 using System.Web.Http;
-using Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry;
+using LightInject;
+using BotBuilder.Instrumentation;
 
 namespace Microsoft.Bot.Sample.SimpleAlarmBot
 {
@@ -10,8 +11,16 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot
     {
         protected void Application_Start()
         {
-            // Initialize telemetry subsytem.
-            TelemetryLogger.Initialize(ConfigurationManager.AppSettings["InstrumentationKey"], ConfigurationManager.AppSettings["TextAnalyticsApiKey"], ConfigurationManager.AppSettings["TextAnalyticsMinLenght"]);
+            //Setup DI
+            IoC.Container.Register<BotBuilder.Instrumentation.Interfaces.IBotFrameworkInstrumentation>((service) => {
+                return new BotFrameworkApplicationInsightsInstrumentation(
+                    ConfigurationManager.AppSettings["InstrumentationKey"], 
+                    new SentimentManager(
+                            ConfigurationManager.AppSettings["TextAnalyticsApiKey"], 
+                            ConfigurationManager.AppSettings["TextAnalyticsMinLenght"],
+                            ConfigurationManager.AppSettings["CognitiveServiceApiEndpoint"]
+                            ));
+            }, new PerContainerLifetime()); //Only one telemetry instance is kept per application
 
             // Configure Web API.
             GlobalConfiguration.Configure(WebApiConfig.Register);

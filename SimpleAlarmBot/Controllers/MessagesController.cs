@@ -6,7 +6,6 @@ using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Sample.SimpleAlarmBot.Dialogs;
-using Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry;
 
 namespace Microsoft.Bot.Sample.SimpleAlarmBot.Controllers
 {
@@ -42,7 +41,7 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Controllers
         private async Task<Activity> HandleSystemMessage(Activity message)
         {
             // Other that happen outside dialogs need to be logged manually, we do that here.
-            await TelemetryLogger.TrackActivity(message);
+            await IoC.GetBotInstrumentation().TrackActivity(message);
 
             if (message.Type == ActivityTypes.DeleteUserData)
             {

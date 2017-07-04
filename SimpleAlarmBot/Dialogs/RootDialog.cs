@@ -6,23 +6,21 @@ using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Sample.SimpleAlarmBot.Services;
-using Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry;
 
 namespace Microsoft.Bot.Sample.SimpleAlarmBot.Dialogs
 {
-    [LuisModel("769815d3-074d-49fe-9907-2d6a0e203e82", "61b5f3fa57724702a3a16a045867ab39")]
+    [LuisModel("0a2cc164-5a19-47b7-b85e-41914d9037ba", "d7b46a6c72bf46c1b67f2c4f21acf960")]
     [Serializable]
     public class RootDialog : LuisDialog<object>
     {
         private const string _entityAlarmName = "AlarmName";
         private const string _entityAlarmStartTime = "builtin.datetime.time";
-        private static readonly AlarmService _alarms = new AlarmService();
+        private static readonly Services.AlarmService _alarms = new Services.AlarmService();
 
         protected override Task DispatchToIntentHandler(IDialogContext context, IAwaitable<IMessageActivity> item, IntentRecommendation bestInent, LuisResult result)
         {
             // Log the resolved intent. 
-            TelemetryLogger.TrackLuisIntent(context.Activity, result);
+            IoC.GetBotInstrumentation().TrackLuisIntent(context.Activity, result);
             return base.DispatchToIntentHandler(context, item, bestInent, result);
         }
 
