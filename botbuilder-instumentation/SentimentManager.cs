@@ -15,13 +15,16 @@ namespace BotBuilder.Instrumentation
     {
         private string _textAnalyticsApiKey;
         private string _cognitiveServiceApiEndpoint;
-        private string _textAnalyticsMinLength;
+        private int _textAnalyticsMinLength;
 
         public SentimentManager(string textAnalyiticsApiKey,string textAnalyticsMinLength, string cognitiveServiceApiEndpoint)
         {
             _textAnalyticsApiKey = textAnalyiticsApiKey;
             _cognitiveServiceApiEndpoint = cognitiveServiceApiEndpoint;
-            _textAnalyticsMinLength = textAnalyticsMinLength;
+            if(!Int32.TryParse(textAnalyticsMinLength,out _textAnalyticsMinLength))
+            {
+                _textAnalyticsMinLength = 0;
+            }
         }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace BotBuilder.Instrumentation
             }
 
             var numWords = text.Split(' ').Length;
-            if (numWords >= Int32.Parse(_textAnalyticsMinLength))
+            if (numWords >= _textAnalyticsMinLength)
             {
                 return new Dictionary<string, string>
                 {
