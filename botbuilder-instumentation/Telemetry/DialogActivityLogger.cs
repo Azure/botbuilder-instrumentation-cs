@@ -23,6 +23,7 @@ namespace BotBuilder.Instrumentation.Telemetry
 
         public async Task LogAsync(IActivity activity)
         {
+            //TODO: Check if there is apannelty for creating this "scope" again and again
             using (var scope = Conversation.Container.BeginLifetimeScope())
             {
                 var service = scope.Resolve<IBotFrameworkInstrumentation>();

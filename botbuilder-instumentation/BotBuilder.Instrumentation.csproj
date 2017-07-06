@@ -83,10 +83,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotFrameworkInstrumentation.cs" />
+    <Compile Include="Instumentation\BotFrameworkInstrumentation.cs" />
+    <Compile Include="Dialogs\InstrumentedLuisDialog.cs" />
+    <Compile Include="Instumentation\InstrumentationSettings.cs" />
     <Compile Include="Interfaces\IBotFrameworkInstrumentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SentimentManager.cs" />
+    <Compile Include="Managers\SentimentManager.cs" />
     <Compile Include="Telemetry\BatchInput.cs" />
     <Compile Include="Telemetry\BatchResult.cs" />
     <Compile Include="Telemetry\DialogActivityLogger.cs" />
@@ -99,5 +101,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,22 +12,34 @@ using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 using Microsoft.ApplicationInsights.DataContracts;
 using BotBuilder.Instrumentation.Telemetry;
+using BotBuilder.Instrumentation.Managers;
+using BotBuilder.Instrumentation.Instumentation;
 
 namespace BotBuilder.Instrumentation
 {
     public class BotFrameworkApplicationInsightsInstrumentation : IBotFrameworkInstrumentation
     {
-        private SentimentManager _sentimentManager;
-        private TelemetryClient _telemetryClient;
+        private List<TelemetryClient> _telemetryClients;
+        private InstrumentationSettings _settings;
 
-        public BotFrameworkApplicationInsightsInstrumentation(string activeInstrumentationKey, SentimentManager sentimentManager)
+        public BotFrameworkApplicationInsightsInstrumentation(InstrumentationSettings settings)
         {
-            _telemetryClient = new TelemetryClient();
+            if(settings == null)
+            {
+                throw new System.Exception("Settings cannot be null");
+            }
+            if (settings.InstrumentationKeys == null || settings.InstrumentationKeys.Count==0)
+            {
+                throw new System.Exception("Settings must contain at least one instrumentation key");
+            }
+            _settings = settings;
 
-            // Initialize AppInsights with telemetry key.
-            TelemetryConfiguration.Active.InstrumentationKey = activeInstrumentationKey;
-            _sentimentManager = sentimentManager;
-
+            //init clients
+            _telemetryClients = new List<TelemetryClient>();
+            _settings.InstrumentationKeys.ForEach((key) => {
+                _telemetryClients.Add(new TelemetryClient(new TelemetryConfiguration(key)));
+            });
+            
             // Register activity logger via autofac DI.
             var builder = new ContainerBuilder();
             builder.RegisterType<DialogActivityLogger>().As<IActivityLogger>().InstancePerLifetimeScope();
@@ -39,12 +51,12 @@ namespace BotBuilder.Instrumentation
         {
             var et = BuildEventTelemetry(activity, customProperties);
 
-            _telemetryClient.TrackEvent(et);
+            _telemetryClients.ForEach(c => c.TrackEvent(et));
 
             // Track sentiment only for incoming messages. 
             if (et.Name == TelemetryEventTypes.MessageReceived)
             {
-                await TrackMessageSentiment(activity);
+                await TrackMessageSentiment(activity, customProperties);
             }
         }
 
@@ -63,7 +75,7 @@ namespace BotBuilder.Instrumentation
 
             var eventTelemetry = BuildEventTelemetry(activity, properties);
             eventTelemetry.Name = TelemetryEventTypes.LuisIntentDialog;
-            _telemetryClient.TrackEvent(eventTelemetry);
+            _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
         public void TrackQnaEvent(IActivity activity, string userQuery, string kbQuestion, string kbAnswer, double score)
@@ -78,22 +90,41 @@ namespace BotBuilder.Instrumentation
 
             var eventTelemetry = BuildEventTelemetry(activity, properties);
             eventTelemetry.Name = TelemetryEventTypes.QnaEvent;
-            _telemetryClient.TrackEvent(eventTelemetry);
+            _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
-        private async Task TrackMessageSentiment(IActivity activity)
+        public void TrackCustomEvent(IActivity activity, Dictionary<string, string> customEventProperties)
         {
-            if (_sentimentManager == null)
+            var eventTelemetry = BuildEventTelemetry(activity, customEventProperties);
+            eventTelemetry.Name = TelemetryEventTypes.CustomEvent;
+            _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
+        }
+
+        private async Task TrackMessageSentiment(IActivity activity, IDictionary<string, string> customProperties = null)
+        {
+            if (_settings.SentimentManager == null)
             {
                 return;
             }
 
-            var properties = await _sentimentManager.GetSentimentProperties(activity.AsMessageActivity().Text);
+            var properties = await _settings.SentimentManager.GetSentimentProperties(activity.AsMessageActivity().Text);
             if (properties != null)
             {
+                //if there are custom properties, also add them.
+                if(customProperties != null)
+                {
+                    foreach(var kvp in customProperties)
+                    {
+                        if(!properties.ContainsKey(kvp.Key))
+                        {
+                            properties.Add(kvp.Key, kvp.Value);
+                        }
+                    }
+                }
+
                 var et = BuildEventTelemetry(activity, properties);
                 et.Name = TelemetryEventTypes.MessageSentiment;
-                _telemetryClient.TrackEvent(et);
+                _telemetryClients.ForEach(c => c.TrackEvent(et));
             }
         }
 
@@ -115,7 +146,10 @@ namespace BotBuilder.Instrumentation
                     {
                         et.Name = TelemetryEventTypes.MessageReceived;
                         et.Properties.Add("userId", activity.From.Id);
-                        et.Properties.Add("userName", activity.From.Name);
+                        if (!_settings.OmitUsernameFromTelemetry)
+                        {
+                            et.Properties.Add("userName", activity.From.Name);
+                        }
                     }
                     else
                     {
