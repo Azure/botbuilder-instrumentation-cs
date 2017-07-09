@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,15 +12,16 @@ namespace BotBuilder.Instrumentation.Managers
 {
     public class SentimentManager
     {
-        private string _textAnalyticsApiKey;
-        private string _cognitiveServiceApiEndpoint;
-        private int _textAnalyticsMinLength;
+        private readonly string _textAnalyticsApiKey;
+        private readonly string _cognitiveServiceApiEndpoint;
+        private readonly int _textAnalyticsMinLength;
 
-        public SentimentManager(string textAnalyiticsApiKey,string textAnalyticsMinLength, string cognitiveServiceApiEndpoint)
+        public SentimentManager(string textAnalyiticsApiKey, string textAnalyticsMinLength,
+            string cognitiveServiceApiEndpoint)
         {
             _textAnalyticsApiKey = textAnalyiticsApiKey;
             _cognitiveServiceApiEndpoint = cognitiveServiceApiEndpoint;
-            if(!Int32.TryParse(textAnalyticsMinLength,out _textAnalyticsMinLength))
+            if (!int.TryParse(textAnalyticsMinLength, out _textAnalyticsMinLength))
             {
                 _textAnalyticsMinLength = 0;
             }
@@ -60,7 +60,13 @@ namespace BotBuilder.Instrumentation.Managers
             return sentimentInfo.Documents[0].Score;
         }
 
-        private async Task<BatchResult> GetSentiment(string apiKey, string jsonSentimentInput)
+        /// <summary>
+        /// Method is marked as public virtual so that we can mock it during performance tests
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <param name="jsonSentimentInput"></param>
+        /// <returns></returns>
+        public virtual async Task<BatchResult> GetSentiment(string apiKey, string jsonSentimentInput)
         {
             using (var client = new HttpClient())
             {
