@@ -13,6 +13,7 @@ using System.Configuration;
 
 namespace BotBuilder.Instrumentation.Dialogs
 {
+    [Serializable]
     public class InstrumentedLuisDialog<TResult> : LuisDialog<TResult>
     {
         public InstrumentedLuisDialog(string luisModelId, string luisSubscriptionKey) : base(new LuisService(new LuisModelAttribute(luisModelId, luisSubscriptionKey)))
