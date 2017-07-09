@@ -8,7 +8,7 @@ build:
   verbosity: normal
 after_build:
 - cmd: "BotBuilder.Instrumentation.Benchmarks\bin\%APPVEYOR_CONFIGURATION%\BotBuilder.Instrumentation.Benchmarks.exe"
-- cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BotBuilder.Instrumentation.Benchmarks\bin\%APPVEYOR_CONFIGURATION%\BenchmarkDotNet.Artifacts\*.*
+- cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BenchmarkDotNet.Artifacts\*.*
 artifacts:
   - path: benchmarks.zip
     name: benchmarks
