@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.History;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Builder.Dialogs;
+using BotBuilder.Instrumentation.Interfaces;
+using Autofac;
 
-namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
+namespace BotBuilder.Instrumentation.Telemetry
 {
     /// <summary>
     /// A generic logger for Dialog activities. 
@@ -20,7 +23,12 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
 
         public async Task LogAsync(IActivity activity)
         {
-            await TelemetryLogger.TrackActivity(activity, _botData);
+            //TODO: Check if there is apannelty for creating this "scope" again and again
+            using (var scope = Conversation.Container.BeginLifetimeScope())
+            {
+                var service = scope.Resolve<IBotFrameworkInstrumentation>();
+                await service.TrackActivity(activity, _botData);
+            }
         }
     }
 }

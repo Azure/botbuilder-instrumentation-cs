@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
+namespace BotBuilder.Instrumentation.Telemetry
 {
     public class BatchInput
     {

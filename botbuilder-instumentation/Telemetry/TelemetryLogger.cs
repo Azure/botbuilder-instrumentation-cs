@@ -56,19 +56,10 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
         /// <summary>
         /// Logs an IActivity as a Custom Event to AppInishgts.
         /// </summary>
-        public static async Task TrackActivity(IActivity activity, IBotData botData = null)
+        public static async Task TrackActivity(IActivity activity, IBotData botData = null, IDictionary<string, string> customProperties = null)
         {
-            var et = BuildEventTelemetry(activity);
-#if DEBUG
-            if (botData != null)
-            {
-                await botData.LoadAsync(CancellationToken.None);
-                et.Properties.Add("debugConversationData", JsonConvert.SerializeObject(botData.ConversationData));
-                et.Properties.Add("debugPrivateConversationData", JsonConvert.SerializeObject(botData.PrivateConversationData));
-                et.Properties.Add("debugUserData", JsonConvert.SerializeObject(botData.UserData));
-                et.Properties.Add("debugActivity", JsonConvert.SerializeObject(activity));
-            }
-#endif
+            var et = BuildEventTelemetry(activity, customProperties);
+            
             TelemetryClient.TrackEvent(et);
 
             // Track sentiment only for incoming messages. 
@@ -92,6 +83,21 @@ namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
 
             var eventTelemetry = BuildEventTelemetry(activity, properties);
             eventTelemetry.Name = TelemetryEventTypes.LuisIntentDialog;
+            TelemetryClient.TrackEvent(eventTelemetry);
+        }
+
+        public static void TrackQnaEvent(IActivity activity, string userQuery, string kbQuestion, string kbAnswer, double score)
+        {
+            var properties = new Dictionary<string, string>
+            {
+                {"userQuery", userQuery},
+                {"kbQuestion", kbQuestion},
+                {"kbAnswer", kbAnswer},
+                {"score", score.ToString()}
+            };
+
+            var eventTelemetry = BuildEventTelemetry(activity, properties);
+            eventTelemetry.Name = TelemetryEventTypes.QnaEvent;
             TelemetryClient.TrackEvent(eventTelemetry);
         }
 

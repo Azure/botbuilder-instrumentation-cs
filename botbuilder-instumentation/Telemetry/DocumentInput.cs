@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.Bot.Sample.SimpleAlarmBot.Telemetry
+namespace BotBuilder.Instrumentation.Telemetry
 {
     public class DocumentInput
     {
