@@ -1,4 +1,7 @@
 # BotBuilder Instrumantation (C#)
+
+[![NuGet](https://img.shields.io/nuget/v/BotBuilder.Instrumentation.svg)](https://www.nuget.org/packages/BotBuilder.Instrumentation) [![Build status](https://ci.appveyor.com/api/projects/status/f1uweta1wndnb974/branch/master?svg=true)](https://ci.appveyor.com/project/syedhassaanahmed/botbuilder-instrumentation-cs/branch/master)
+
 This module is used to add instrumentation to bots built with [Microsoft Bot Framework](https://dev.botframework.com/). 
 You can leverage the events from this module using [Ibex Dashboard](https://github.com/CatalystCode/ibex-dashboard).
 

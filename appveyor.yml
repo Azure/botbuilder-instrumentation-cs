@@ -1,0 +1,14 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: normal
+after_build:
+- cmd: "BotBuilder.Instrumentation.Benchmarks\bin\%APPVEYOR_CONFIGURATION%\BotBuilder.Instrumentation.Benchmarks.exe"
+- cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BotBuilder.Instrumentation.Benchmarks\bin\%APPVEYOR_CONFIGURATION%\BenchmarkDotNet.Artifacts\*.*
+artifacts:
+  - path: benchmarks.zip
+    name: benchmarks
