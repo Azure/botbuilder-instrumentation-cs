@@ -2,6 +2,11 @@
 This module is used to add instrumentation to bots built with [Microsoft Bot Framework](https://dev.botframework.com/). 
 You can leverage the events from this module using [Ibex Dashboard](https://github.com/CatalystCode/ibex-dashboard).
 
+### Via Nuget
+Visit us on [nuget.org](https://www.nuget.org/packages/BotBuilder.Instrumentation/)
+Or add it to your Visual Studio project by running the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console): 
+`PM> Install-Package BotBuilder.Instrumentation`
+
 ## Getting Started
 
 1. Create an Application Insights service under your subscription. (for more information on App Insights see [Set up Application Insights for ASP.NET](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net))
@@ -89,10 +94,4 @@ You can send your own custom properties as `Dictionary<string, string>` to the t
 DefaultInstrumentation.TrackCustomEvent(activity, customEventProperties);
 ```
 
-
-## Code of Conduct
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
