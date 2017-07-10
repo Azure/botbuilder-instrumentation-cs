@@ -1,4 +1,7 @@
 # BotBuilder Instrumantation (C#)
+
+[![NuGet](https://img.shields.io/nuget/v/BotBuilder.Instrumentation.svg)](https://www.nuget.org/packages/BotBuilder.Instrumentation) [![Build status](https://ci.appveyor.com/api/projects/status/f1uweta1wndnb974/branch/master?svg=true)](https://ci.appveyor.com/project/syedhassaanahmed/botbuilder-instrumentation-cs/branch/master)
+
 This module is used to add instrumentation to bots built with [Microsoft Bot Framework](https://dev.botframework.com/). 
 You can leverage the events from this module using [Ibex Dashboard](https://github.com/CatalystCode/ibex-dashboard).
 
@@ -33,12 +36,12 @@ Add the following keys to appSettings section.
     
     <!-- Text Analytics data for message sentiment analysis -->
     <add key="TextAnalyticsApiKey" value="d19acc35642b4ce4876199b8b39d6ba3" />
-    <add key="TextAnalyticsMinLenght" value="3" />
+    <add key="TextAnalyticsMinLength" value="3" />
     <add key="CognitiveServiceApiEndpoint" value="https://westus.api.cognitive.microsoft.com/"/>
 ```
 * `InstrumentationKey`. Is your Application Insights instrumentation key, you can obtain this key from Azure Portal once you configure your web application to use application insights.
 * `TextAnalyticsApiKey`. To track sentiment analysis, the telemetry code calls the Text Analytics API, you can obtain this key from the Azure Portal. The bot won't log any sentiment data if this value is empty.
-* `TextAnalyticsMinLenght`. You normally don't want to track sentiment for short phrases like "yes", "no", etc. In the example above, this parameter tells the logger to only track sentiment for messages that have 3 words or more. 
+* `TextAnalyticsMinLength`. You normally don't want to track sentiment for short phrases like "yes", "no", etc. In the example above, this parameter tells the logger to only track sentiment for messages that have 3 words or more. 
 
 ### Initialize the bot builder instrumentation
 Since the code is thread safe, and Application Insights SDK recommends to create a single instance per application of the SDK,
@@ -54,7 +57,7 @@ or for example using an IoC container to keep a single instance with per-lifetim
             OmitUsernameFromTelemetry = Convert.ToBoolean(ConfigurationManager.AppSettings["InstrumentationShouldOmitUsernameFromTelemetry"]),
             SentimentManager = new SentimentManager(
                         ConfigurationManager.AppSettings["TextAnalyticsApiKey"],
-                        ConfigurationManager.AppSettings["TextAnalyticsMinLenght"],
+                        ConfigurationManager.AppSettings["TextAnalyticsMinLength"],
                         ConfigurationManager.AppSettings["CognitiveServiceApiEndpoint"]
                         )
         });

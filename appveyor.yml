@@ -1,0 +1,20 @@
+version: 1.0.0.{build}
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: normal
+after_build:
+- cmd: "BotBuilder.Instrumentation.Benchmarks\bin\%APPVEYOR_CONFIGURATION%\BotBuilder.Instrumentation.Benchmarks.exe"
+- cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BenchmarkDotNet.Artifacts\*.*
+artifacts:
+  - path: benchmarks.zip
+    name: benchmarks

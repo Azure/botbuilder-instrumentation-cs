@@ -3,25 +3,26 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using BotBuilder.Instrumentation.Interfaces;
 
 namespace BotBuilder.Instrumentation.Managers
 {
-    public class SentimentManager
+    public class SentimentManager : ISentimentManager
     {
-        private string _textAnalyticsApiKey;
-        private string _cognitiveServiceApiEndpoint;
-        private int _textAnalyticsMinLength;
+        private readonly string _textAnalyticsApiKey;
+        private readonly string _cognitiveServiceApiEndpoint;
+        private readonly int _textAnalyticsMinLength;
 
-        public SentimentManager(string textAnalyiticsApiKey,string textAnalyticsMinLength, string cognitiveServiceApiEndpoint)
+        public SentimentManager(string textAnalyiticsApiKey, string textAnalyticsMinLength,
+            string cognitiveServiceApiEndpoint)
         {
             _textAnalyticsApiKey = textAnalyiticsApiKey;
             _cognitiveServiceApiEndpoint = cognitiveServiceApiEndpoint;
-            if(!Int32.TryParse(textAnalyticsMinLength,out _textAnalyticsMinLength))
+            if (!int.TryParse(textAnalyticsMinLength, out _textAnalyticsMinLength))
             {
                 _textAnalyticsMinLength = 0;
             }
@@ -30,7 +31,7 @@ namespace BotBuilder.Instrumentation.Managers
         /// <summary>
         /// Helper method to track the sentiment of incoming messages.
         /// </summary>
-        internal async Task<Dictionary<string, string>> GetSentimentProperties(string text)
+        public async Task<Dictionary<string, string>> GetSentimentProperties(string text)
         {
             if (string.IsNullOrWhiteSpace(_textAnalyticsApiKey))
             {

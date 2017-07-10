@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Luis.Models;
@@ -12,15 +13,14 @@ using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 using Microsoft.ApplicationInsights.DataContracts;
 using BotBuilder.Instrumentation.Telemetry;
-using BotBuilder.Instrumentation.Managers;
 using BotBuilder.Instrumentation.Instumentation;
 
 namespace BotBuilder.Instrumentation
 {
     public class BotFrameworkApplicationInsightsInstrumentation : IBotFrameworkInstrumentation
     {
-        private List<TelemetryClient> _telemetryClients;
-        private InstrumentationSettings _settings;
+        private readonly List<TelemetryClient> _telemetryClients;
+        private readonly InstrumentationSettings _settings;
 
         public BotFrameworkApplicationInsightsInstrumentation(InstrumentationSettings settings)
         {
@@ -36,7 +36,7 @@ namespace BotBuilder.Instrumentation
 
             //init clients
             _telemetryClients = new List<TelemetryClient>();
-            _settings.InstrumentationKeys.ForEach((key) => {
+            _settings.InstrumentationKeys.ForEach(key => {
                 _telemetryClients.Add(new TelemetryClient(new TelemetryConfiguration(key)));
             });
             
@@ -62,7 +62,7 @@ namespace BotBuilder.Instrumentation
 
         public void TrackLuisIntent(IActivity activity, LuisResult result)
         {
-            if (result == null || result.TopScoringIntent==null )
+            if (result?.TopScoringIntent == null )
             {
                 return;
             }
@@ -85,7 +85,7 @@ namespace BotBuilder.Instrumentation
                 {"userQuery", userQuery},
                 {"kbQuestion", kbQuestion},
                 {"kbAnswer", kbAnswer},
-                {"score", score.ToString()}
+                {"score", score.ToString(CultureInfo.InvariantCulture)}
             };
 
             var eventTelemetry = BuildEventTelemetry(activity, properties);
@@ -93,7 +93,7 @@ namespace BotBuilder.Instrumentation
             _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
-        public void TrackCustomEvent(IActivity activity, Dictionary<string, string> customEventProperties)
+        public void TrackCustomEvent(IActivity activity, IDictionary<string, string> customEventProperties)
         {
             var eventTelemetry = BuildEventTelemetry(activity, customEventProperties);
             eventTelemetry.Name = TelemetryEventTypes.CustomEvent;
@@ -189,11 +189,5 @@ namespace BotBuilder.Instrumentation
 
             return et;
         }
-
-        
-
-        
-
-        
     }
 }
