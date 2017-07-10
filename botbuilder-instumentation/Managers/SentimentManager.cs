@@ -7,10 +7,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using BotBuilder.Instrumentation.Interfaces;
 
 namespace BotBuilder.Instrumentation.Managers
 {
-    public class SentimentManager
+    public class SentimentManager : ISentimentManager
     {
         private readonly string _textAnalyticsApiKey;
         private readonly string _cognitiveServiceApiEndpoint;
@@ -30,7 +31,7 @@ namespace BotBuilder.Instrumentation.Managers
         /// <summary>
         /// Helper method to track the sentiment of incoming messages.
         /// </summary>
-        internal async Task<Dictionary<string, string>> GetSentimentProperties(string text)
+        public async Task<Dictionary<string, string>> GetSentimentProperties(string text)
         {
             if (string.IsNullOrWhiteSpace(_textAnalyticsApiKey))
             {
@@ -60,13 +61,7 @@ namespace BotBuilder.Instrumentation.Managers
             return sentimentInfo.Documents[0].Score;
         }
 
-        /// <summary>
-        /// Method is marked as public virtual so that we can mock it during performance tests
-        /// </summary>
-        /// <param name="apiKey"></param>
-        /// <param name="jsonSentimentInput"></param>
-        /// <returns></returns>
-        public virtual async Task<BatchResult> GetSentiment(string apiKey, string jsonSentimentInput)
+        private async Task<BatchResult> GetSentiment(string apiKey, string jsonSentimentInput)
         {
             using (var client = new HttpClient())
             {

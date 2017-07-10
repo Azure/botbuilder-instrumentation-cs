@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
-using BotBuilder.Instrumentation.Managers;
-using BotBuilder.Instrumentation.Telemetry;
+using BotBuilder.Instrumentation.Interfaces;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using Moq;
@@ -40,14 +39,14 @@ namespace BotBuilder.Instrumentation.Benchmarks
             SetupLuisResult();
         }
 
-        private static SentimentManager GetSentimentManager()
+        private static ISentimentManager GetSentimentManager()
         {
-            var sentimentManagerMock = new Mock<SentimentManager>("text analytics api key", "", "http://localhost");
-            sentimentManagerMock.Setup(x => x.GetSentiment(It.IsAny<string>(), It.IsAny<string>())).Returns
+            var sentimentManagerMock = new Mock<ISentimentManager>();
+            sentimentManagerMock.Setup(x => x.GetSentimentProperties(It.IsAny<string>())).Returns
             (
-                Task.FromResult(new BatchResult
+                Task.FromResult(new Dictionary<string, string>
                 {
-                    Documents = new List<DocumentResult> {new DocumentResult {Score = 80}}
+                    {"score", "60"}
                 })
             );
 
@@ -102,7 +101,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
                 TopScoringIntent = new IntentRecommendation
                 {
                     Intent = "luis intent",
-                    Score = 60
+                    Score = 70
                 },
                 Entities = new List<EntityRecommendation>
                 {
@@ -110,7 +109,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
                     {
                         Entity = "luis entity",
                         Type = "entity type",
-                        Score = 70,
+                        Score = 80,
                         Role = "entity role"
                     }
                 }
