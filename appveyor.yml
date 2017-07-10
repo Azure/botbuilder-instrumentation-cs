@@ -16,7 +16,7 @@ build:
   verbosity: minimal
 after_build:
 - cmd: "%BENCHMARK_PROJECT%\\bin\\%CONFIGURATION%\\%BENCHMARK_PROJECT%.exe"
-- cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BenchmarkDotNet.Artifacts\*.*
+- cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BenchmarkDotNet.Artifacts\results\*.*
 artifacts:
   - path: benchmarks.zip
     name: benchmarks
