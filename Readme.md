@@ -96,5 +96,24 @@ You can send your own custom properties as `Dictionary<string, string>` to the t
 ```
 DefaultInstrumentation.TrackCustomEvent(activity, customEventProperties);
 ```
+## Performance benchmarks
+The SDK is performance tested using [BenchmarkDotNet](http://benchmarkdotnet.org/Overview.htm) library. The gist of this implementation is in project [BotBuilder.Instrumentation.Benchmarks](https://github.com/CatalystCode/botbuilder-instrumentation-cs/tree/master/BotBuilder.Instrumentation.Benchmarks) where all publicly exposed methods of the SDK are benchmarked. Typical results on our local dev environment looks like following (where `us` = Microseconds);
 
+``` ini
 
+BenchmarkDotNet=v0.10.8, OS=Windows 10 Redstone 2 (10.0.15063)
+Processor=Intel Core i7-6820HQ CPU 2.70GHz (Skylake), ProcessorCount=8
+Frequency=2648437 Hz, Resolution=377.5812 ns, Timer=TSC
+  [Host]   : Clr 4.0.30319.42000, 32bit LegacyJIT-v4.7.2098.0DEBUG [AttachedDebugger]
+  ShortRun : Clr 4.0.30319.42000, 32bit LegacyJIT-v4.7.2098.0
+
+Job=ShortRun  LaunchCount=1  TargetCount=3  
+WarmupCount=3  
+
+```
+ |           Method |      Mean |     Error |   StdDev |       Min |       Max |
+ |----------------- |----------:|----------:|---------:|----------:|----------:|
+ |    TrackActivity | 180.58 us | 135.70 us | 7.667 us | 172.93 us | 188.27 us |
+ |  TrackLuisIntent |  78.54 us |  43.36 us | 2.450 us |  76.05 us |  80.94 us |
+ |    TrackQnaEvent |  80.65 us |  37.23 us | 2.104 us |  78.23 us |  81.98 us |
+ | TrackCustomEvent |  80.35 us | 100.14 us | 5.658 us |  75.34 us |  86.48 us |
