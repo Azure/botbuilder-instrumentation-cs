@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
+using BenchmarkDotNet.Attributes.Jobs;
 using BotBuilder.Instrumentation.Interfaces;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
@@ -11,6 +12,7 @@ using Moq;
 namespace BotBuilder.Instrumentation.Benchmarks
 {
     [MinColumn, MaxColumn]
+    [ShortRunJob]
     public class BotFrameworkApplicationInsightsInstrumentationTests
     {
         #region One time Setup
@@ -121,7 +123,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
         #region Benchmarks
 
         [Benchmark]
-        public async Task TestTrackActivityAsync()
+        public async Task TrackActivity()
         {
             await _defaultInstrumentation.TrackActivity(_activity, null, _customProperties);
         }
