@@ -23,7 +23,7 @@ artifacts:
   - path: benchmarks.zip
     name: benchmarks
     type: Zip
-  - path: '**\BotBuilder.Instrumentation.nupkg'
+  - path: '**\BotBuilder.Instrumentation.*.nupkg'
     name: nuget
     type: NuGetPackage
 deploy:
