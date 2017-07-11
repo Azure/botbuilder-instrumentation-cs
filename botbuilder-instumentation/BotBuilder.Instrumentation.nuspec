@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>BotBuilder.Instrumentation</id>
+    <version>$version$</version>
+    <title>BotBuilder Instrumentation</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/CatalystCode/botbuilder-instrumentation-cs</projectUrl>
+    <iconUrl>http://docs.botframework.com/images/bot_icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This library is used to add instrumentation to bots built with Microsoft Bot Framework.</description>
+    <summary>This library is used to add instrumentation to bots built with Microsoft Bot Framework.</summary>
+    <copyright>Copyright 2017</copyright>
+    <tags>bots botbuilder microsoft botframework bot chatbot</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+          <dependency id="Autofac" version="3.5.2" />
+          <dependency id="Microsoft.Bot.Builder" version="3.8.3.0" />
+          <dependency id="Microsoft.ApplicationInsights" version="2.4.0" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
