@@ -94,10 +94,10 @@ namespace BotBuilder.Instrumentation
             _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
-        public void TrackCustomEvent(IActivity activity, IDictionary<string, string> customEventProperties)
+        public void TrackCustomEvent(IActivity activity, string eventName = Telemetry.TelemetryEventTypes.CustomEvent, IDictionary<string, string> customEventProperties = null)
         {
             var eventTelemetry = BuildEventTelemetry(activity, customEventProperties);
-            eventTelemetry.Name = TelemetryEventTypes.CustomEvent;
+            eventTelemetry.Name = string.IsNullOrWhiteSpace(eventName) ? TelemetryEventTypes.CustomEvent : eventName;
             _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 

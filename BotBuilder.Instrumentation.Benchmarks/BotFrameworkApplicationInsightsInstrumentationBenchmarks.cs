@@ -144,7 +144,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
         [Benchmark]
         public void TrackCustomEvent()
         {
-            _defaultInstrumentation.TrackCustomEvent(_activity, _customProperties);
+            _defaultInstrumentation.TrackCustomEvent(_activity, null, _customProperties);
         }
 
         #endregion
