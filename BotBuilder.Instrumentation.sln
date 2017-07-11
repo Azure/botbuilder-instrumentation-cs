@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{78090FC1-7822-48C8-8189-B606B5491471}"
 EndProject
@@ -18,11 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotBuilder.Instrumentation", "botbuilder-instumentation\BotBuilder.Instrumentation.csproj", "{A4E323FA-7BE5-4928-A2F6-403B685A4782}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotBuilder.Instrumentation.Benchmarks", "BotBuilder.Instrumentation.Benchmarks\BotBuilder.Instrumentation.Benchmarks.csproj", "{1A0ADEFA-8407-40A7-B56B-2AE489C91ABF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nugets", "Nugets", "{5E6D9D11-7C7A-4B90-8F49-4F7EC797E4CF}"
-	ProjectSection(SolutionItems) = preProject
-		Solution Items\Nugets\BotBuilder.Instrumentation.1.0.0.3.nupkg = Solution Items\Nugets\BotBuilder.Instrumentation.1.0.0.3.nupkg
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +40,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{940CAD4F-DD7C-41A5-8E0C-DE9B4775A8E1} = {78090FC1-7822-48C8-8189-B606B5491471}
 		{8CDB5B2E-B51E-4B90-8F89-82A268CB884E} = {78090FC1-7822-48C8-8189-B606B5491471}
-		{5E6D9D11-7C7A-4B90-8F49-4F7EC797E4CF} = {78090FC1-7822-48C8-8189-B606B5491471}
 	EndGlobalSection
 EndGlobal

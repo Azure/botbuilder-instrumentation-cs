@@ -1,4 +1,4 @@
-# BotBuilder Instrumantation (C#)
+# BotBuilder Instrumentation (C#)
 
 [![NuGet](https://img.shields.io/nuget/v/BotBuilder.Instrumentation.svg)](https://www.nuget.org/packages/BotBuilder.Instrumentation) [![Build status](https://ci.appveyor.com/api/projects/status/f1uweta1wndnb974/branch/master?svg=true)](https://ci.appveyor.com/project/syedhassaanahmed/botbuilder-instrumentation-cs/branch/master)
 
