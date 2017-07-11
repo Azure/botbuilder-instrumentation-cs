@@ -10,6 +10,9 @@ Visit us on [nuget.org](https://www.nuget.org/packages/BotBuilder.Instrumentatio
 Or add it to your Visual Studio project by running the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console): 
 `PM> Install-Package BotBuilder.Instrumentation`
 
+### Sample bot with instrumentation included
+This [C# project](https://github.com/itye-msft/Bot-with-instrumentation-cs) is a working bot sample which utilizes the instrumentation library.
+
 ## Getting Started
 
 1. Create an Application Insights service under your subscription. (for more information on App Insights see [Set up Application Insights for ASP.NET](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-asp-net))
@@ -23,13 +26,16 @@ Create a new [Sentiment Analisys Service under Cognitive Services](https://www.m
 When creating the service, make sure to mark **Text Analytics - Preview**.
 
 ### Setting up web.config.
-Add the following keys to appSettings section.
+If you are not using cognitive services/LUIS and you just want to automatically send conversation data to the telemetry, all you need to add is your instrumentation key, and a flag to send(or not) username.
 ```xml
     <!-- AppInsights InstrumentationKey-->
     <add key="InstrumentationKey" value="17b45976-7f04-4f49-a771-3446788959e0" />
     <add key="InstrumentationShouldOmitUsernameFromTelemetry" value="0"/>
-    
-	<!-- All following keys are optional:-->
+```
+* `InstrumentationKey`. Is your Application Insights instrumentation key, you can obtain this key from Azure Portal once you configure your web application to use application insights.
+
+In case you are using cognitive service and LUIS, you also need to add the following keys:
+```xml
     <!-- LUIS credentials-->
     <add key="LuisModelId" value="0a2cc164-5a19-47b7-b85e-41914d9037ba" />
     <add key="LuisSubscriptionKey" value="d7b46a6c72bf46c1b67f2c4f21acf960" />
@@ -39,7 +45,6 @@ Add the following keys to appSettings section.
     <add key="TextAnalyticsMinLength" value="3" />
     <add key="CognitiveServiceApiEndpoint" value="https://westus.api.cognitive.microsoft.com/"/>
 ```
-* `InstrumentationKey`. Is your Application Insights instrumentation key, you can obtain this key from Azure Portal once you configure your web application to use application insights.
 * `TextAnalyticsApiKey`. To track sentiment analysis, the telemetry code calls the Text Analytics API, you can obtain this key from the Azure Portal. The bot won't log any sentiment data if this value is empty.
 * `TextAnalyticsMinLength`. You normally don't want to track sentiment for short phrases like "yes", "no", etc. In the example above, this parameter tells the logger to only track sentiment for messages that have 3 words or more. 
 
@@ -48,6 +53,19 @@ Since the code is thread safe, and Application Insights SDK recommends to create
 we also recommed creating a single instance of the bot builder instrumentation.
 You can achieve that in various ways such as creating a readonly singleton,
 or for example using an IoC container to keep a single instance with per-lifetime restriction.
+
+Basic sample with no cognitive services:
+```cs
+	//Singleton implementation 
+    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = new BotFrameworkApplicationInsightsInstrumentation(
+        new BotBuilder.Instrumentation.Instumentation.InstrumentationSettings
+        {
+            InstrumentationKeys = new List<string>(new string[] { ConfigurationManager.AppSettings["InstrumentationKey"] }),
+            OmitUsernameFromTelemetry = Convert.ToBoolean(ConfigurationManager.AppSettings["InstrumentationShouldOmitUsernameFromTelemetry"]),
+            SentimentManager = null
+        });
+```
+If you are using cognitive services, than you can initialize the singleton as follows:
 ```cs
 	//Singleton implementation 
     public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = new BotFrameworkApplicationInsightsInstrumentation(
