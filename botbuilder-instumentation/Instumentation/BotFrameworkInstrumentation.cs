@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs.Internals;
@@ -26,11 +27,11 @@ namespace BotBuilder.Instrumentation
         {
             if(settings == null)
             {
-                throw new System.Exception("Settings cannot be null");
+                throw new ArgumentNullException(nameof(settings));
             }
-            if (settings.InstrumentationKeys == null || settings.InstrumentationKeys.Count==0)
+            if (settings.InstrumentationKeys == null || settings.InstrumentationKeys.Count == 0)
             {
-                throw new System.Exception("Settings must contain at least one instrumentation key");
+                throw new ArgumentException("Settings must contain at least one instrumentation key");
             }
             _settings = settings;
 

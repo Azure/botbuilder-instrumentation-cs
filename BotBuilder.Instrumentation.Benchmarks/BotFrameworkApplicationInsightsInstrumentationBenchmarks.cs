@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
 using BenchmarkDotNet.Attributes.Jobs;
+using BotBuilder.Instrumentation.Instumentation;
 using BotBuilder.Instrumentation.Interfaces;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
@@ -13,7 +14,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
 {
     [MinColumn, MaxColumn]
     [ShortRunJob]
-    public class BotFrameworkApplicationInsightsInstrumentationTests
+    public class BotFrameworkApplicationInsightsInstrumentationBenchmarks
     {
         #region One time Setup
 
@@ -28,7 +29,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
             _defaultInstrumentation =
                 new BotFrameworkApplicationInsightsInstrumentation
                 (
-                    new Instumentation.InstrumentationSettings
+                    new InstrumentationSettings
                     {
                         InstrumentationKeys = new List<string>(new[] {"instrumentation key"}),
                         OmitUsernameFromTelemetry = false,
