@@ -13,6 +13,8 @@ platform: Any CPU
 before_build:
 - cmd: nuget restore
 build:
+  publish_nuget: true
+  include_nuget_references: true
   verbosity: minimal
 after_build:
 - cmd: "%BENCHMARK_PROJECT%\\bin\\%CONFIGURATION%\\%BENCHMARK_PROJECT%.exe"
@@ -21,7 +23,7 @@ artifacts:
   - path: benchmarks.zip
     name: benchmarks
     type: Zip
-  - path: '**\*.nupkg'
+  - path: '**\BotBuilder.Instrumentation.nupkg'
     name: nuget
     type: NuGetPackage
 deploy:
