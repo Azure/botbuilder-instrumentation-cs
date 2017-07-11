@@ -30,7 +30,7 @@ If you are not using cognitive services/LUIS and you just want to automatically 
 ```xml
     <!-- AppInsights InstrumentationKey-->
     <add key="InstrumentationKey" value="17b45976-7f04-4f49-a771-3446788959e0" />
-    <add key="InstrumentationShouldOmitUsernameFromTelemetry" value="0"/>
+    <add key="InstrumentationShouldOmitUsernameFromTelemetry" value="False"/>
 ```
 * `InstrumentationKey`. Is your Application Insights instrumentation key, you can obtain this key from Azure Portal once you configure your web application to use application insights.
 
