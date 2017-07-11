@@ -14,12 +14,5 @@
     <summary>This library is used to add instrumentation to bots built with Microsoft Bot Framework.</summary>
     <copyright>Copyright 2017</copyright>
     <tags>bots botbuilder microsoft botframework bot chatbot</tags>
-    <dependencies>
-      <group targetFramework=".NETFramework4.6">
-          <dependency id="Autofac" version="3.5.2" />
-          <dependency id="Microsoft.Bot.Builder" version="3.8.3.0" />
-          <dependency id="Microsoft.ApplicationInsights" version="2.4.0" />
-      </group>
-    </dependencies>
   </metadata>
 </package>
