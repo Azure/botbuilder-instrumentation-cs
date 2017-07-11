@@ -11,7 +11,7 @@ Or add it to your Visual Studio project by running the following command in the 
 `PM> Install-Package BotBuilder.Instrumentation`
 
 ### Sample bot with instrumentation included
-This [C# project](https://github.com/itye-msft/Bot-with-instrumentation-cs) is a working bot sample which utilizes the instrumentation library.
+To see this DLL in action, you can take a look at this [https://github.com/itye-msft/Bot-with-instrumentation-cs](https://github.com/itye-msft/Bot-with-instrumentation-cs) C# project, which is a working bot sample using instrumentation library.
 
 ## Getting Started
 
