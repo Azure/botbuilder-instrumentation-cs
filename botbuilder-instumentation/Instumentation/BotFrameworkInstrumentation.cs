@@ -48,7 +48,8 @@ namespace BotBuilder.Instrumentation
             builder.Update(Conversation.Container);
         }
 
-        public async Task TrackActivity(IActivity activity, IBotData botData = null, IDictionary<string, string> customProperties = null)
+        public async Task TrackActivity(IActivity activity, IBotData botData = null, 
+            IDictionary<string, string> customProperties = null)
         {
             var et = BuildEventTelemetry(activity, customProperties);
 
@@ -63,7 +64,7 @@ namespace BotBuilder.Instrumentation
 
         public void TrackLuisIntent(IActivity activity, LuisResult result)
         {
-            if (result?.TopScoringIntent == null )
+            if (result?.TopScoringIntent == null)
             {
                 return;
             }
@@ -94,7 +95,8 @@ namespace BotBuilder.Instrumentation
             _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
-        public void TrackCustomEvent(IActivity activity, string eventName = Telemetry.TelemetryEventTypes.CustomEvent, IDictionary<string, string> customEventProperties = null)
+        public void TrackCustomEvent(IActivity activity, string eventName = TelemetryEventTypes.CustomEvent, 
+            IDictionary<string, string> customEventProperties = null)
         {
             var eventTelemetry = BuildEventTelemetry(activity, customEventProperties);
             eventTelemetry.Name = string.IsNullOrWhiteSpace(eventName) ? TelemetryEventTypes.CustomEvent : eventName;
@@ -132,10 +134,13 @@ namespace BotBuilder.Instrumentation
         /// <summary>
         /// Helper method to create an EventTelemetry instance and populate common properties depending on the message type.
         /// </summary>
-        private EventTelemetry BuildEventTelemetry(IActivity activity, IDictionary<string, string> properties = null, IDictionary<string, double> metrics = null)
+        private EventTelemetry BuildEventTelemetry(IActivity activity, IDictionary<string, string> properties = null, 
+            IDictionary<string, double> metrics = null)
         {
             var et = new EventTelemetry();
-            if (activity.Timestamp != null) et.Properties.Add("timestamp", Utils.GetDateTimeAsIso8601(activity.Timestamp.Value));
+            if (activity.Timestamp != null)
+                et.Properties.Add("timestamp", Utils.GetDateTimeAsIso8601(activity.Timestamp.Value));
+
             et.Properties.Add("type", activity.Type);
             et.Properties.Add("channel", activity.ChannelId);
 

@@ -1,24 +1,22 @@
 ﻿using BotBuilder.Instrumentation.Telemetry;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using BotBuilder.Instrumentation.Interfaces;
 
 namespace BotBuilder.Instrumentation.Managers
 {
-    public class SentimentManager : ISentimentManager
+    public class SentimentManager
     {
         private readonly string _textAnalyticsApiKey;
         private readonly string _cognitiveServiceApiEndpoint;
         private readonly int _textAnalyticsMinLength;
+        private readonly IHttpCommunication _httpCommunication;
 
         public SentimentManager(string textAnalyiticsApiKey, string textAnalyticsMinLength,
-            string cognitiveServiceApiEndpoint)
+            string cognitiveServiceApiEndpoint, IHttpCommunication httpCommunication = null)
         {
             _textAnalyticsApiKey = textAnalyiticsApiKey;
             _cognitiveServiceApiEndpoint = cognitiveServiceApiEndpoint;
@@ -26,6 +24,7 @@ namespace BotBuilder.Instrumentation.Managers
             {
                 _textAnalyticsMinLength = 0;
             }
+            _httpCommunication = httpCommunication ?? new HttpCommunication();
         }
 
         /// <summary>
@@ -63,18 +62,14 @@ namespace BotBuilder.Instrumentation.Managers
 
         private async Task<BatchResult> GetSentiment(string apiKey, string jsonSentimentInput)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(_cognitiveServiceApiEndpoint);
+            const string sentimentRoute = "text/analytics/v2.0/sentiment";
+            var headers = new Dictionary<string, string> {{"Ocp-Apim-Subscription-Key", apiKey}};
+            var data = Encoding.UTF8.GetBytes(jsonSentimentInput);
 
-                // Request headers.
-                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var sentimentRawResponse = await _httpCommunication.SendAsync(_cognitiveServiceApiEndpoint, 
+                sentimentRoute, headers, data);
 
-                var byteData = Encoding.UTF8.GetBytes(jsonSentimentInput);
-                var sentimentRawResponse = await Utils.CallEndpoint(client, "text/analytics/v2.0/sentiment", byteData);
-                return JsonConvert.DeserializeObject<BatchResult>(sentimentRawResponse);
-            }
+            return JsonConvert.DeserializeObject<BatchResult>(sentimentRawResponse);
         }
     }
 }

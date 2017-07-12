@@ -57,28 +57,12 @@ or for example using an IoC container to keep a single instance with per-lifetim
 Basic sample with no cognitive services:
 ```cs
 	//Singleton implementation 
-    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = new BotFrameworkApplicationInsightsInstrumentation(
-        new BotBuilder.Instrumentation.Instumentation.InstrumentationSettings
-        {
-            InstrumentationKeys = new List<string>(new string[] { ConfigurationManager.AppSettings["InstrumentationKey"] }),
-            OmitUsernameFromTelemetry = Convert.ToBoolean(ConfigurationManager.AppSettings["InstrumentationShouldOmitUsernameFromTelemetry"]),
-            SentimentManager = null
-        });
+    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = DependencyResolver.Current.CreateBasicInstrumentation();
 ```
 If you are using cognitive services, than you can initialize the singleton as follows:
 ```cs
 	//Singleton implementation 
-    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = new BotFrameworkApplicationInsightsInstrumentation(
-        new BotBuilder.Instrumentation.Instumentation.InstrumentationSettings
-        {
-            InstrumentationKeys = new List<string>(new string[] { ConfigurationManager.AppSettings["InstrumentationKey"] }),
-            OmitUsernameFromTelemetry = Convert.ToBoolean(ConfigurationManager.AppSettings["InstrumentationShouldOmitUsernameFromTelemetry"]),
-            SentimentManager = new SentimentManager(
-                        ConfigurationManager.AppSettings["TextAnalyticsApiKey"],
-                        ConfigurationManager.AppSettings["TextAnalyticsMinLength"],
-                        ConfigurationManager.AppSettings["CognitiveServiceApiEndpoint"]
-                        )
-        });
+    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = DependencyResolver.Current.CreateInstrumentationWithCognitiveServices();
 ```
 The call above, will automatically start monitoring your Bots Dialogs and send telemtry to Application Insights.
 
