@@ -13,17 +13,28 @@ namespace BotBuilder.Instrumentation.Managers
         private readonly string _textAnalyticsApiKey;
         private readonly string _cognitiveServiceApiEndpoint;
         private readonly int _textAnalyticsMinLength;
+        private readonly IDictionary<string, string> _httpHeaders;
         private readonly IHttpCommunication _httpCommunication;
+
+        private const string SentimentApiRoute = "text/analytics/v2.0/sentiment";
+        private const string SubscriptionKey = "Ocp-Apim-Subscription-Key";
 
         public SentimentManager(string textAnalyiticsApiKey, string textAnalyticsMinLength,
             string cognitiveServiceApiEndpoint, IHttpCommunication httpCommunication = null)
         {
             _textAnalyticsApiKey = textAnalyiticsApiKey;
+            if (!string.IsNullOrWhiteSpace(_textAnalyticsApiKey))
+            {
+                _httpHeaders = new Dictionary<string, string> {{SubscriptionKey, _textAnalyticsApiKey}};
+            }
+
             _cognitiveServiceApiEndpoint = cognitiveServiceApiEndpoint;
+
             if (!int.TryParse(textAnalyticsMinLength, out _textAnalyticsMinLength))
             {
                 _textAnalyticsMinLength = 0;
             }
+
             _httpCommunication = httpCommunication ?? new HttpCommunication();
         }
 
@@ -56,18 +67,16 @@ namespace BotBuilder.Instrumentation.Managers
             };
             var sentimentInput = new BatchInput { Documents = docs };
             var jsonSentimentInput = JsonConvert.SerializeObject(sentimentInput);
-            var sentimentInfo = await GetSentiment(_textAnalyticsApiKey, jsonSentimentInput);
+            var sentimentInfo = await GetSentiment(jsonSentimentInput);
             return sentimentInfo.Documents[0].Score;
         }
 
-        private async Task<BatchResult> GetSentiment(string apiKey, string jsonSentimentInput)
+        private async Task<BatchResult> GetSentiment(string jsonSentimentInput)
         {
-            const string sentimentRoute = "text/analytics/v2.0/sentiment";
-            var headers = new Dictionary<string, string> {{"Ocp-Apim-Subscription-Key", apiKey}};
             var data = Encoding.UTF8.GetBytes(jsonSentimentInput);
 
             var sentimentRawResponse = await _httpCommunication.PostAsync(_cognitiveServiceApiEndpoint, 
-                sentimentRoute, headers, data);
+                SentimentApiRoute, _httpHeaders, data);
 
             return JsonConvert.DeserializeObject<BatchResult>(sentimentRawResponse);
         }
