@@ -56,7 +56,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
             httpCommunicationMock.Setup
             (
                 x =>
-                    x.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<byte[]>()))
+                    x.PostAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<byte[]>()))
                         .Returns(Task.FromResult(JsonConvert.SerializeObject(fakeSentimentResult))
             );
 

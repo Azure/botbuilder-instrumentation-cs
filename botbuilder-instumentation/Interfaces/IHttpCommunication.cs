@@ -5,6 +5,6 @@ namespace BotBuilder.Instrumentation.Interfaces
 {
     public interface IHttpCommunication
     {
-        Task<string> SendAsync(string baseEndpoint, string route, IDictionary<string, string> headers, byte[] data);
+        Task<string> PostAsync(string baseEndpoint, string route, IDictionary<string, string> headers, byte[] data);
     }
 }

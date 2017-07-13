@@ -66,7 +66,7 @@ namespace BotBuilder.Instrumentation.Managers
             var headers = new Dictionary<string, string> {{"Ocp-Apim-Subscription-Key", apiKey}};
             var data = Encoding.UTF8.GetBytes(jsonSentimentInput);
 
-            var sentimentRawResponse = await _httpCommunication.SendAsync(_cognitiveServiceApiEndpoint, 
+            var sentimentRawResponse = await _httpCommunication.PostAsync(_cognitiveServiceApiEndpoint, 
                 sentimentRoute, headers, data);
 
             return JsonConvert.DeserializeObject<BatchResult>(sentimentRawResponse);

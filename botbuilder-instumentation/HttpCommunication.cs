@@ -11,7 +11,7 @@ namespace BotBuilder.Instrumentation
     {
         private const string JsonMimeType = "application/json";
 
-        public async Task<string> SendAsync(string baseEndpoint, string route, IDictionary<string, string> headers, byte[] data)
+        public async Task<string> PostAsync(string baseEndpoint, string route, IDictionary<string, string> headers, byte[] data)
         {
             using (var httpClient = new HttpClient())
             {

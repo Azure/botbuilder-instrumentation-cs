@@ -101,7 +101,7 @@ namespace BotBuilder.Instrumentation.Tests
             // Assert if sentiment analysis endpoint was never called
             sentimentHttpMock.Verify(
                 x =>
-                    x.SendAsync
+                    x.PostAsync
                     (
                         It.IsAny<string>(),
                         It.IsAny<string>(),
@@ -136,7 +136,7 @@ namespace BotBuilder.Instrumentation.Tests
             // Assert if sentiment analysis endpoint was called with correct params
             sentimentHttpMock.Verify(
                 x =>
-                    x.SendAsync
+                    x.PostAsync
                     (
                         It.Is<string>(s => s == cognitiveServiceApiEndpoint),
                         It.IsAny<string>(), 
