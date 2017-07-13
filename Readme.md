@@ -56,13 +56,11 @@ or for example using an IoC container to keep a single instance with per-lifetim
 
 Basic sample with no cognitive services:
 ```cs
-	//Singleton implementation 
-    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = DependencyResolver.Current.CreateBasicInstrumentation();
+    public readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = DependencyResolver.Current.DefaultBasicInstrumentation;
 ```
 If you are using cognitive services, than you can initialize the singleton as follows:
 ```cs
-	//Singleton implementation 
-    public static readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = DependencyResolver.Current.CreateInstrumentationWithCognitiveServices();
+    public readonly BotFrameworkApplicationInsightsInstrumentation DefaultInstrumentation = DependencyResolver.Current.DefaultInstrumentationWithCognitiveServices;
 ```
 The call above, will automatically start monitoring your Bots Dialogs and send telemtry to Application Insights.
 
