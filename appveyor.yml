@@ -16,7 +16,11 @@ build:
   publish_nuget: true
   include_nuget_references: true
   verbosity: minimal
-after_build:
+test:
+  assemblies:
+    only:
+      - '**\*.Tests.dll'
+after_test:
 - cmd: "%BENCHMARK_PROJECT%\\bin\\%CONFIGURATION%\\%BENCHMARK_PROJECT%.exe"
 - cmd: 7z a benchmarks.zip %APPVEYOR_BUILD_FOLDER%\BenchmarkDotNet.Artifacts\results\*.*
 artifacts:

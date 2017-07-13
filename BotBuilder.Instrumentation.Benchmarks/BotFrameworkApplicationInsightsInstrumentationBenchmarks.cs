@@ -4,16 +4,20 @@ using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
 using BenchmarkDotNet.Attributes.Jobs;
+using BotBuilder.Instrumentation.Instumentation;
 using BotBuilder.Instrumentation.Interfaces;
+using BotBuilder.Instrumentation.Managers;
+using BotBuilder.Instrumentation.Telemetry;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using Moq;
+using Newtonsoft.Json;
 
 namespace BotBuilder.Instrumentation.Benchmarks
 {
     [MinColumn, MaxColumn]
     [ShortRunJob]
-    public class BotFrameworkApplicationInsightsInstrumentationTests
+    public class BotFrameworkApplicationInsightsInstrumentationBenchmarks
     {
         #region One time Setup
 
@@ -28,7 +32,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
             _defaultInstrumentation =
                 new BotFrameworkApplicationInsightsInstrumentation
                 (
-                    new Instumentation.InstrumentationSettings
+                    new InstrumentationSettings
                     {
                         InstrumentationKeys = new List<string>(new[] {"instrumentation key"}),
                         OmitUsernameFromTelemetry = false,
@@ -41,18 +45,22 @@ namespace BotBuilder.Instrumentation.Benchmarks
             SetupLuisResult();
         }
 
-        private static ISentimentManager GetSentimentManager()
+        private static SentimentManager GetSentimentManager()
         {
-            var sentimentManagerMock = new Mock<ISentimentManager>();
-            sentimentManagerMock.Setup(x => x.GetSentimentProperties(It.IsAny<string>())).Returns
+            var fakeSentimentResult = new BatchResult
+            {
+                Documents = new List<DocumentResult> {new DocumentResult {Score = 60}}
+            };
+
+            var httpCommunicationMock = new Mock<IHttpCommunication>();
+            httpCommunicationMock.Setup
             (
-                Task.FromResult(new Dictionary<string, string>
-                {
-                    {"score", "60"}
-                })
+                x =>
+                    x.PostAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Dictionary<string, string>>(), It.IsAny<byte[]>()))
+                        .Returns(Task.FromResult(JsonConvert.SerializeObject(fakeSentimentResult))
             );
 
-            return sentimentManagerMock.Object;
+            return new SentimentManager("text analytics api key", "", "http://localhost", httpCommunicationMock.Object);
         }
 
         private void SetupActivity()
@@ -143,7 +151,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
         [Benchmark]
         public void TrackCustomEvent()
         {
-            _defaultInstrumentation.TrackCustomEvent(_activity, null, _customProperties);
+            _defaultInstrumentation.TrackCustomEvent(_activity, customEventProperties: _customProperties);
         }
 
         #endregion

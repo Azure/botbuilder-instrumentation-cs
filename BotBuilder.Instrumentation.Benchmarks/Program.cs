@@ -6,7 +6,7 @@ namespace BotBuilder.Instrumentation.Benchmarks
     {
         private static void Main()
         {
-            BenchmarkRunner.Run<BotFrameworkApplicationInsightsInstrumentationTests>();
+            BenchmarkRunner.Run<BotFrameworkApplicationInsightsInstrumentationBenchmarks>();
         }
     }
 }
