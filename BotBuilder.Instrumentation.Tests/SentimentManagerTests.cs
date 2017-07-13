@@ -37,6 +37,14 @@ namespace BotBuilder.Instrumentation.Tests
         }
 
         [TestMethod]
+        public async Task GetSentimentProperties_Http404_ReturnsNull()
+        {
+            var sentimentManager = new SentimentManager("text analytics api key", "", "http://localhost");
+            var result = await sentimentManager.GetSentimentProperties("hello");
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
         public async Task GetSentimentProperties_Text_ReturnsCorrectScore()
         {
             const double expectedScore = 60.0;

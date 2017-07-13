@@ -51,15 +51,20 @@ namespace BotBuilder.Instrumentation.Managers
             var numWords = text.Split(' ').Length;
             if (numWords >= _textAnalyticsMinLength)
             {
-                return new Dictionary<string, string>
+                var score = await GetSentimentScore(text);
+                if (score != null)
                 {
-                    {"score", (await GetSentimentScore(text)).ToString(CultureInfo.InvariantCulture)}
-                };
+                    return new Dictionary<string, string>
+                    {
+                        {"score", score.Value.ToString(CultureInfo.InvariantCulture)}
+                    };
+                }
             }
+
             return null;
         }
 
-        private async Task<double> GetSentimentScore(string message)
+        private async Task<double?> GetSentimentScore(string message)
         {
             var docs = new List<DocumentInput>
             {
@@ -68,7 +73,7 @@ namespace BotBuilder.Instrumentation.Managers
             var sentimentInput = new BatchInput { Documents = docs };
             var jsonSentimentInput = JsonConvert.SerializeObject(sentimentInput);
             var sentimentInfo = await GetSentiment(jsonSentimentInput);
-            return sentimentInfo.Documents[0].Score;
+            return sentimentInfo?.Documents[0].Score;
         }
 
         private async Task<BatchResult> GetSentiment(string jsonSentimentInput)
@@ -78,7 +83,9 @@ namespace BotBuilder.Instrumentation.Managers
             var sentimentRawResponse = await _httpCommunication.PostAsync(_cognitiveServiceApiEndpoint, 
                 SentimentApiRoute, _httpHeaders, data);
 
-            return JsonConvert.DeserializeObject<BatchResult>(sentimentRawResponse);
+            return sentimentRawResponse == null
+                ? null
+                : JsonConvert.DeserializeObject<BatchResult>(sentimentRawResponse);
         }
     }
 }
