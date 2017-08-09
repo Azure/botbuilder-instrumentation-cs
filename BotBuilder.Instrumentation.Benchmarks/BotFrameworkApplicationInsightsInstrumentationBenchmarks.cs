@@ -154,6 +154,12 @@ namespace BotBuilder.Instrumentation.Benchmarks
             _defaultInstrumentation.TrackCustomEvent(_activity, customEventProperties: _customProperties);
         }
 
+        [Benchmark]
+        public void TrackGoalTriggeredEvent()
+        {
+            _defaultInstrumentation.TrackGoalTriggeredEvent(_activity, "Goal name");
+        }
+
         #endregion
     }
 }
