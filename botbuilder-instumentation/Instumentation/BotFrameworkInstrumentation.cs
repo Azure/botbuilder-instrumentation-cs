@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -129,6 +130,19 @@ namespace BotBuilder.Instrumentation
                 et.Name = TelemetryEventTypes.MessageSentiment;
                 _telemetryClients.ForEach(c => c.TrackEvent(et));
             }
+        }
+
+        public void TrackGoalTriggeredEvent(IActivity activity, string goalName,
+            IDictionary<string, string> goalTriggeredEventProperties = null, string eventName = TelemetryEventTypes.GoalTriggeredEvent)
+        {
+            if(goalTriggeredEventProperties == null)
+                goalTriggeredEventProperties = new ConcurrentDictionary<string, string>();
+
+            goalTriggeredEventProperties.Add("GoalName", goalName);
+
+            var eventTelemetry = BuildEventTelemetry(activity, goalTriggeredEventProperties);
+            eventTelemetry.Name = string.IsNullOrWhiteSpace(eventName) ? TelemetryEventTypes.GoalTriggeredEvent : eventName;
+            _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
         /// <summary>
