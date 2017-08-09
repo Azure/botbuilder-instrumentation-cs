@@ -90,6 +90,11 @@ DefaultInstrumentation.TrackQnaEvent(activity, userQuery, kbQuestion, kbAnswer, 
 ```
 You can see how to implement a QnA service [here](https://github.com/Microsoft/BotBuilder-CognitiveServices/tree/master/CSharp/Samples/QnAMaker/QnABotWithOverrides)
 
+## Tracking generic Goals
+You can trigger generic goals, much like the way a Goal can be triggered on a web site in Google Analytics
+```
+DefaultInstrumentation.TrackGoalTriggeredEvent(activity, goalName, goalTriggeredEventProperties);
+```
 
 ## Tracking custom events
 You can send your own custom properties as `Dictionary<string, string>` to the telemetry.
