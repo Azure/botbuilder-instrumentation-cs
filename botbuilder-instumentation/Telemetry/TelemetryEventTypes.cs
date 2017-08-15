@@ -18,5 +18,6 @@ namespace BotBuilder.Instrumentation.Telemetry
         public const string ConversationEnded = "MBFEvent.EndConversation";
         public const string QnaEvent = "MBFEvent.QNAEvent";
         public const string CustomEvent = "MBFEvent.CustomEvent";
+        public const string GoalTriggeredEvent = "MBFEvent.GoalEvent";
     }
 }
