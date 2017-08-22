@@ -133,15 +133,15 @@ namespace BotBuilder.Instrumentation
         }
 
         public void TrackGoalTriggeredEvent(IActivity activity, string goalName,
-            IDictionary<string, string> goalTriggeredEventProperties = null, string eventName = TelemetryEventTypes.GoalTriggeredEvent)
+            IDictionary<string, string> goalTriggeredEventProperties = null)
         {
             if(goalTriggeredEventProperties == null)
-                goalTriggeredEventProperties = new ConcurrentDictionary<string, string>();
+                goalTriggeredEventProperties = new Dictionary<string, string>();
 
             goalTriggeredEventProperties.Add("GoalName", goalName);
 
             var eventTelemetry = BuildEventTelemetry(activity, goalTriggeredEventProperties);
-            eventTelemetry.Name = string.IsNullOrWhiteSpace(eventName) ? TelemetryEventTypes.GoalTriggeredEvent : eventName;
+            eventTelemetry.Name = TelemetryEventTypes.GoalTriggeredEvent;
             _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
