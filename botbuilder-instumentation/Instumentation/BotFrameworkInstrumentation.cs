@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -133,7 +132,8 @@ namespace BotBuilder.Instrumentation
         }
 
         public void TrackGoalTriggeredEvent(IActivity activity, string goalName,
-            IDictionary<string, string> goalTriggeredEventProperties = null)
+            IDictionary<string, string> goalTriggeredEventProperties = null,
+            string eventName = TelemetryEventTypes.GoalTriggeredEvent)
         {
             if(goalTriggeredEventProperties == null)
                 goalTriggeredEventProperties = new Dictionary<string, string>();
