@@ -84,11 +84,12 @@ There are situations where you may need to send a message to the user outside th
 In these cases, you  need to manually invoke the `await DefaultInstrumentation.TrackActivity(message);` method.  
 
 ## Tracking QnA Maker events
-Hook into the result function of QNA to extract relevant data
+[Ibex Dashboard](https://github.com/CatalystCode/ibex-dashboard) has a built-in QnA dashboard which you can easily use.
+Hook into the result function of QNA to extract relevant data:
 ```
 DefaultInstrumentation.TrackQnaEvent(activity, userQuery, kbQuestion, kbAnswer, score);
 ```
-You can see how to implement a QnA service [here](https://github.com/Microsoft/BotBuilder-CognitiveServices/tree/master/CSharp/Samples/QnAMaker/QnABotWithOverrides)
+You can see how to implement a QnA service [here](https://github.com/Microsoft/BotBuilder-CognitiveServices/tree/master/CSharp/Samples/QnAMaker/QnABotWithOverrides) and in particular [QnADialogWithOverrides](https://github.com/Microsoft/BotBuilder-CognitiveServices/blob/master/CSharp/Samples/QnAMaker/QnABotWithOverrides/Dialogs/QnADialogWithOverrides.cs)
 
 ## Tracking generic Goals
 You can trigger generic goals, much like the way a Goal can be triggered on a web site in Google Analytics

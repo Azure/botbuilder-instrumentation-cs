@@ -13,6 +13,6 @@ namespace BotBuilder.Instrumentation.Interfaces
         void TrackLuisIntent(IActivity activity, LuisResult result);
         void TrackQnaEvent(IActivity activity, string userQuery, string kbQuestion, string kbAnswer, double score);
         void TrackCustomEvent(IActivity activity, string eventName = Telemetry.TelemetryEventTypes.CustomEvent, IDictionary<string, string> customEventProperties = null);
-        void TrackGoalTriggeredEvent(IActivity activity, string goalName, IDictionary<string, string> goalTriggeredEventProperties = null, string eventName = Telemetry.TelemetryEventTypes.GoalTriggeredEvent);
+        void TrackGoalTriggeredEvent(IActivity activity, string goalName, IDictionary<string, string> goalTriggeredEventProperties = null);
     }
 }
