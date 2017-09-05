@@ -19,6 +19,11 @@ namespace BotBuilder.Instrumentation.Dialogs
         public InstrumentedLuisDialog(string luisModelId, string luisSubscriptionKey) : base(new LuisService(new LuisModelAttribute(luisModelId, luisSubscriptionKey)))
         {
         }
+
+        public InstrumentedLuisDialog(string luisModelId, string luisSubscriptionKey, string domain) : base(new LuisService(new LuisModelAttribute(luisModelId, luisSubscriptionKey, LuisApiVersion.V2, domain)))
+        {
+        }
+
         protected override Task DispatchToIntentHandler(IDialogContext context, IAwaitable<IMessageActivity> item, IntentRecommendation bestIntent, LuisResult result)
         {
             using (var scope = Conversation.Container.BeginLifetimeScope())
