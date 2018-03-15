@@ -152,7 +152,7 @@ namespace BotBuilder.Instrumentation
         {
             var et = new EventTelemetry();
             if (activity.Timestamp != null)
-                et.Properties.Add("timestamp", Utils.GetDateTimeAsIso8601(activity.Timestamp.Value));
+                et.Properties.Add("timestamp", Utils.GetDateTimeOffsetAsIso8601(activity.Timestamp.Value));
 
             et.Properties.Add("type", activity.Type);
             et.Properties.Add("channel", activity.ChannelId);
