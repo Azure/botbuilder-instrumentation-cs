@@ -25,7 +25,7 @@ namespace BotBuilder.Instrumentation
 
         public BotFrameworkApplicationInsightsInstrumentation(InstrumentationSettings settings)
         {
-            if(settings == null)
+            if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
@@ -37,18 +37,21 @@ namespace BotBuilder.Instrumentation
 
             //init clients
             _telemetryClients = new List<TelemetryClient>();
-            _settings.InstrumentationKeys.ForEach(key => {
+            _settings.InstrumentationKeys.ForEach(key =>
+            {
                 _telemetryClients.Add(new TelemetryClient(new TelemetryConfiguration(key)));
             });
-            
+
             // Register activity logger via autofac DI.
-            var builder = new ContainerBuilder();
-            builder.RegisterType<DialogActivityLogger>().As<IActivityLogger>().InstancePerLifetimeScope();
-            builder.RegisterInstance<IBotFrameworkInstrumentation>(this).As<IBotFrameworkInstrumentation>().SingleInstance();
-            builder.Update(Conversation.Container);
+            Conversation.UpdateContainer(builder =>
+            {
+                builder.RegisterType<DialogActivityLogger>().As<IActivityLogger>().InstancePerLifetimeScope();
+                builder.RegisterInstance<IBotFrameworkInstrumentation>(this).As<IBotFrameworkInstrumentation>()
+                    .SingleInstance();
+            });
         }
 
-        public async Task TrackActivity(IActivity activity, IBotData botData = null, 
+        public async Task TrackActivity(IActivity activity, IBotData botData = null,
             IDictionary<string, string> customProperties = null)
         {
             var et = BuildEventTelemetry(activity, customProperties);
@@ -95,7 +98,7 @@ namespace BotBuilder.Instrumentation
             _telemetryClients.ForEach(c => c.TrackEvent(eventTelemetry));
         }
 
-        public void TrackCustomEvent(IActivity activity, string eventName = TelemetryEventTypes.CustomEvent, 
+        public void TrackCustomEvent(IActivity activity, string eventName = TelemetryEventTypes.CustomEvent,
             IDictionary<string, string> customEventProperties = null)
         {
             var eventTelemetry = BuildEventTelemetry(activity, customEventProperties);
@@ -114,11 +117,11 @@ namespace BotBuilder.Instrumentation
             if (properties != null)
             {
                 //if there are custom properties, also add them.
-                if(customProperties != null)
+                if (customProperties != null)
                 {
-                    foreach(var kvp in customProperties)
+                    foreach (var kvp in customProperties)
                     {
-                        if(!properties.ContainsKey(kvp.Key))
+                        if (!properties.ContainsKey(kvp.Key))
                         {
                             properties.Add(kvp.Key, kvp.Value);
                         }
@@ -134,7 +137,7 @@ namespace BotBuilder.Instrumentation
         public void TrackGoalTriggeredEvent(IActivity activity, string goalName,
             IDictionary<string, string> goalTriggeredEventProperties = null)
         {
-            if(goalTriggeredEventProperties == null)
+            if (goalTriggeredEventProperties == null)
                 goalTriggeredEventProperties = new Dictionary<string, string>();
 
             goalTriggeredEventProperties.Add("GoalName", goalName);
@@ -147,7 +150,7 @@ namespace BotBuilder.Instrumentation
         /// <summary>
         /// Helper method to create an EventTelemetry instance and populate common properties depending on the message type.
         /// </summary>
-        private EventTelemetry BuildEventTelemetry(IActivity activity, IDictionary<string, string> properties = null, 
+        private EventTelemetry BuildEventTelemetry(IActivity activity, IDictionary<string, string> properties = null,
             IDictionary<string, double> metrics = null)
         {
             var et = new EventTelemetry();
