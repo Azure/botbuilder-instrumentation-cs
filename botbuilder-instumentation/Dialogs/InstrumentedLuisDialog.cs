@@ -16,11 +16,15 @@ namespace BotBuilder.Instrumentation.Dialogs
     [Serializable]
     public class InstrumentedLuisDialog<TResult> : LuisDialog<TResult>
     {
+        public InstrumentedLuisDialog(LuisModelAttribute luisModel) : base(new LuisService(luisModel))
+        {
+        }
+
         public InstrumentedLuisDialog(string luisModelId, string luisSubscriptionKey) : base(new LuisService(new LuisModelAttribute(luisModelId, luisSubscriptionKey)))
         {
         }
 
-        public InstrumentedLuisDialog(string luisModelId, string luisSubscriptionKey, string domain) : base(new LuisService(new LuisModelAttribute(luisModelId, luisSubscriptionKey, LuisApiVersion.V2, domain)))
+        public InstrumentedLuisDialog(string luisModelId, string luisSubscriptionKey, string domain, double threshold = 0) : base(new LuisService(new LuisModelAttribute(luisModelId, luisSubscriptionKey, LuisApiVersion.V2, domain, threshold)))
         {
         }
 
