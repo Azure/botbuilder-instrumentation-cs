@@ -65,7 +65,7 @@ If you are using cognitive services, than you can initialize the singleton as fo
 The call above, will automatically start monitoring your Bots Dialogs and send telemtry to Application Insights.
 
 ### Tracking LUIS intents
-To tack and LUIS intents all you need to do is inherit your Dialog from InstrumentedLuisDialog
+To track any LUIS intents all you need to do is inherit your Dialog from InstrumentedLuisDialog
 ```cs
 [Serializable]
 public class RootDialog : InstrumentedLuisDialog<object>
